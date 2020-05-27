@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <title>GDP增长趋势散点图统计</title>
+</head>
+<body style="height: 100%; margin: 0">
+    <div id="container" style="height: 100%"></div>
+    <script type="text/javascript" src="echarts.min.js"></script>
+
+    <script type="text/javascript" src="ecStat.min.js"></script>
+
+    <script type="text/javascript">
+        var dom = document.getElementById("container");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        var data = [
+        [1,3678.7 ],
+        [2,4100.5 ],
+
+        [3, 4587.6 ],
+        [4, 4933.7  ],
+
+        [5,5380.5 ],
+
+        [6, 6043.8 ] ,
+
+        [7,7314.2  ],
+
+[8,9123.6  ],
+
+[9,10375.4 ],
+
+[10, 12166.6]  ,
+
+[11,15174.4  ],
+
+[12,17188.4  ],
+
+[13,18923.3  ],
+
+[14,22050.3  ],
+
+[15,27208.2],
+
+[16,  35599.2] ,
+
+[17, 48548.2  ],
+
+[18,60356.6  ],
+
+[19,70779.6],
+
+[20,  78802.9] ,
+
+[22, 83817.6  ],
+
+[23,89366.5],
+
+[24, 99066.1],
+
+[25,  109276.2],
+
+[26,  120480.4 ] ,
+
+[27,136576.3 ],
+
+[28, 161415.4 ],
+
+[29, 185998.9 ],
+
+[30, 219028.5  ],
+
+[31,270704.0 ],
+
+[32, 321229.5],
+
+[33,  347934.9],
+
+[34,  410354.1 ],
+
+[35, 483392.8  ],
+
+[36,537329.0 ],
+
+[37, 588141.2 ],
+
+[38, 642097.6 ],
+
+[39, 683390.5 ],
+
+[40, 737074.0 ],
+
+[41, 820099.5 ],
+
+[42, 896915.6]
+        ];
+
+        // See https://github.com/ecomfe/echarts-stat
+        var myRegression = ecStat.regression('exponential', data);
+
+        myRegression.points.sort(function (a, b) {
+            return a[0] - b[0];
+        });
+
+        option = {
+            title: {
+                text: 'GDP增长趋势散点图统计',
+                subtext: 'By ecStat.regression',
+                sublink: 'https://github.com/ecomfe/echarts-stat',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                }
+            },
+            xAxis: {
+                type: 'value',
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                },
+                splitNumber: 20
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: {
+                    lineStyle: {
+                        type: 'dashed'
+                    }
+                }
+            },
+            series: [{
+                name: 'scatter',
+                type: 'scatter',
+                label: {
+                    emphasis: {
+                        show: true,
+                        position: 'left',
+                        textStyle: {
+                            color: 'blue',
+                            fontSize: 16
+                        }
+                    }
+                },
+                data: data
+            }, {
+                name: 'line',
+                type: 'line',
+                showSymbol: false,
+                smooth: true,
+                data: myRegression.points,
+                markPoint: {
+                    itemStyle: {
+                        normal: {
+                            color: 'transparent'
+                        }
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'left',
+                            formatter: myRegression.expression,
+                            textStyle: {
+                                color: '#333',
+                                fontSize: 14
+                            }
+                        }
+                    },
+                    data: [{
+                        coord: myRegression.points[myRegression.points.length - 1]
+                    }]
+                }
+            }]
+        };
+        ;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    </script>
+</body>
+</html>
